@@ -1,0 +1,33 @@
+# Optional RecSim/RecSim NG support protocol config.
+# Real RecSim loading is not yet implemented. This config uses the mock scaffold.
+# Scaffold evidence only. No recommender benchmark claims.
+
+protocol_name: recsim_optional_support_protocol
+output_dir: runs/recsim_optional_protocol
+seed: 0
+num_steps: 100
+batch_size: 32
+gamma: 0.99
+k_values:
+  - 5
+  - 10
+  - 20
+train_k: 10
+lr: 0.0003
+embedding_dim: 16
+num_users: 100
+num_items: 500
+user_feature_dim: 16
+item_feature_dim: 16
+slate_size: 5
+num_interactions: 1000
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 10
+index_encoder_policy: online
+index_ema_tau: null
+target_tau: 0.05
+target_update_every: 1
+scaffold_only: true
+benchmark_claim: false

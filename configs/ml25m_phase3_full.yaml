@@ -1,0 +1,60 @@
+# Phase 3 — DW-MQL (proposed): full method with B2 firewall + listwise-KL alignment.
+# 10-seed run. benchmark_claim: false — scaffold diagnostics only.
+protocol_name: ml25m_phase3_retrieval_alignment
+data_path: data/movielens/ml-25m/ratings.csv
+output_dir: runs/phase3/retrieval_alignment
+seed: 0  # overridden per-seed by runner
+num_steps: 5000
+batch_size: 256
+embedding_dim: 64
+gamma: 0.99
+k_values: [20]
+train_k: 20
+lr: 0.0001
+min_rating_threshold: 4.0
+
+# Full dataset (no max_rows cap) — requires numpy-prealloc streaming fix
+max_rows: null
+
+# Evaluation cap (10k rows per split — sufficient for stable PMR/recall estimates)
+max_eval_rows: 10000
+
+# ANN index
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 1
+index_encoder_policy: online
+
+# Optimisation
+target_tau: 0.01
+target_update_every: 1
+max_grad_norm: 5.0
+q_l2_regularization_weight: 0.01
+q_value_clip: 5.0
+reward_scale: 1.0
+
+# Density correction (DW-MQL hallmark)
+density_regularization_weight: 0.01
+stationarity_weight: 1.0
+bellman_weight: 1.0
+
+# B2 firewall + listwise-KL alignment (DW-MQL hallmark)
+ranking_margin_weight: 0.1
+ranking_margin: 0.5
+ranking_negative_samples: 20
+retrieval_alignment_weight: 0.1
+retrieval_alignment_margin: 1.0
+retrieval_alignment_warmup_steps: 500
+retrieval_alignment_loss_type: listwise_kl
+listwise_teacher_temperature: 0.2
+listwise_retrieval_temperature: 0.07
+
+# No CQL/BCQ (DW-MQL uses its own regularization)
+cql_weight: 0.0
+bcq_weight: 0.0
+
+device: cuda
+save_model_checkpoint: true
+benchmark_claim: false
+scaffold_only: true

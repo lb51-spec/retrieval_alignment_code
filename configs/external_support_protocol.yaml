@@ -1,0 +1,27 @@
+protocol_name: external_support_protocol_debug
+output_dir: runs/external_support_protocol
+seed: 0
+num_steps: 20
+batch_size: 8
+k_values:
+  - 5
+  - 10
+  - 20
+train_k: 10
+embedding_dim: 8
+gamma: 0.99
+lr: 0.0003
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 5
+index_encoder_policy: online
+index_ema_tau: null
+target_tau: 0.05
+target_update_every: 1
+include_movielens: false
+movielens_data_path: null
+include_d4rl_mock: true
+include_recsim_mock: true
+scaffold_only: true
+benchmark_claim: false

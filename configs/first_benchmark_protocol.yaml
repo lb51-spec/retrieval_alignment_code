@@ -1,0 +1,75 @@
+# First benchmark-style multi-seed experiment protocol.
+#
+# All results are claim-free scaffold diagnostics.
+# benchmark_claim must remain false until real datasets,
+# implemented baselines, and statistical tests are in place.
+#
+# Usage:
+#   python -m retrieval_alignment.train --run-benchmark-protocol \
+#       --config configs/first_benchmark_protocol.yaml \
+#       --data-path /path/to/ml-latest-small/ratings.csv
+
+protocol_name: first_benchmark_protocol
+output_dir: runs/benchmark_protocol
+
+# Sweep axes
+routes:
+  - movielens_chrono
+seeds:
+  - 0
+  - 1
+  - 2
+num_steps: 50
+batch_size: 8
+gamma: 0.99
+k_values:
+  - 20
+  - 50
+  - 100
+train_k: 20
+index_backend_values:
+  - exact
+index_metric: dot
+index_refresh_values:
+  - 5
+  - 20
+index_encoder_policies:
+  - online
+index_ema_tau_values:
+  - null
+
+# Training
+use_persistent_index: true
+target_tau: 0.05
+target_update_every: 1
+
+# Baselines — "random" and "nearest" are implemented trivial baselines.
+# "behavior_cloning", "cql", "iql", "td3_bc" raise NotImplementedError on use.
+baselines:
+  - random
+  - nearest
+
+# Flags
+enable_dwmql: true
+enable_exact_backend_control: true
+enable_ann_backend: false
+
+# MovieLens settings (data_path must be set via --data-path or below)
+# data_path: /path/to/ml-latest-small/ratings.csv
+embedding_dim: 8
+lr: 0.0003
+validation_fraction: 0.1
+test_fraction: 0.1
+min_rating_threshold: 4.0
+max_rows: null
+
+# Stability controls (conservative diagnostics — not performance-tuning claims)
+max_grad_norm: 10.0
+q_l2_regularization_weight: 0.001
+q_value_clip: 20.0
+reward_scale: 1.0
+density_regularization_weight: 0.01
+stationarity_weight: 1.0
+bellman_weight: 1.0
+
+benchmark_claim: false

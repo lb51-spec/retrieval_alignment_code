@@ -1,0 +1,22 @@
+synthetic_only: true
+benchmark_claim: false
+note: "diagnostic protocol only; not benchmark evidence"
+num_steps: 100
+batch_size: 16
+num_transitions: 1024
+num_actions: 1000
+state_dim: 16
+action_dim: 16
+embedding_dim: 64
+gamma: 0.99
+lr: 0.0003
+target_tau: 0.05
+target_update_every: 1
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+k_values: [10, 40, 100]
+refresh_values: [1, 10, 50]
+encoder_policies: ["online", "ema"]
+ema_tau_values: [0.01, 0.05, 0.1, 0.2]
+retrieval_correction_modes: ["aware", "naive", "uniform_weights"]
+index_backend: exact
+index_metric: dot

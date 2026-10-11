@@ -1,0 +1,25 @@
+# Synthetic-only diagnostics profile for retrieval-support sweeps.
+# Use with CLI sweep axes, for example:
+# python -m retrieval_alignment.train --sweep-synthetic-diagnostics --config configs/support_sweep.yaml --sweep-output-dir runs/support_sweep --sweep-refresh-values 1,10,50 --sweep-k-values 10,40 --sweep-encoder-policies ema --sweep-index-ema-tau-values 0.01,0.05,0.1,0.2 --sweep-seeds 0,1,2,3,4 --num-steps 100
+
+seed: 0
+batch_size: 16
+num_transitions: 256
+num_actions: 128
+state_dim: 8
+action_dim: 6
+embedding_dim: 16
+k: 10
+gamma: 0.99
+num_steps: 100
+lr: 0.0003
+target_tau: 0.05
+target_update_every: 1
+use_persistent_index: true
+index_refresh_every: 1
+audit_stale_index: true
+audit_encoder_policy_overlap: true
+index_encoder_policy: ema
+index_ema_tau: 0.05
+index_backend: exact
+index_metric: dot

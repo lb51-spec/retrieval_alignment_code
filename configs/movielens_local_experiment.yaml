@@ -1,0 +1,29 @@
+experiment_name: movielens_local_scaffold_debug
+data_path: path/to/ratings.csv
+output_dir: runs/movielens_local_experiment
+seed: 0
+num_steps: 20
+batch_size: 8
+k: 5
+embedding_dim: 8
+gamma: 0.99
+lr: 0.0003
+split_mode: chronological
+validation_fraction: 0.1
+test_fraction: 0.1
+session_gap_seconds: null
+min_rating_threshold: 4.0
+max_rows: null
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 5
+index_encoder_policy: online
+index_ema_tau: null
+target_tau: 0.05
+target_update_every: 1
+baseline_names:
+  - random
+  - nearest
+scaffold_only: true
+benchmark_claim: false

@@ -1,0 +1,82 @@
+# Strict-stability preset for the first benchmark protocol.
+#
+# Tighter stability controls designed to suppress Q-value explosion (seed 0)
+# and index collapse (seed 2) observed in the 1000-step stabilized run.
+# These are diagnostic controls, not hyperparameter performance claims.
+#
+# Compared to first_benchmark_protocol.yaml:
+#   q_value_clip:                20.0 → 5.0   (aggressive Bellman target clipping)
+#   q_l2_regularization_weight: 0.001 → 0.01  (stronger Q-norm penalty)
+#   max_grad_norm:              10.0 → 5.0    (tighter gradient clipping)
+#   seeds:                      [0,1,2] → [0,1,2,3,4]  (more seeds)
+#   index_refresh_values:       [5,20] → [5]  (single cadence for variance reduction)
+#   k_values:                   [20,50,100] → [20]  (single k for diagnostics)
+#
+# All results are claim-free (benchmark_claim: false).
+#
+# Usage:
+#   python -m retrieval_alignment.train --run-benchmark-protocol \
+#       --config configs/first_benchmark_protocol_strict_stability.yaml \
+#       --data-path /path/to/ml-latest-small/ratings.csv
+
+protocol_name: first_benchmark_protocol_strict_stability
+output_dir: runs/first_benchmark_protocol_strict_stability
+
+# Sweep axes
+routes:
+  - movielens_chrono
+seeds:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+num_steps: 1000
+batch_size: 8
+gamma: 0.99
+k_values:
+  - 20
+train_k: 20
+index_backend_values:
+  - exact
+index_metric: dot
+index_refresh_values:
+  - 5
+index_encoder_policies:
+  - online
+index_ema_tau_values:
+  - null
+
+# Training
+use_persistent_index: true
+target_tau: 0.05
+target_update_every: 1
+
+# Baselines
+baselines:
+  - random
+  - nearest
+
+# Flags
+enable_dwmql: true
+enable_exact_backend_control: true
+enable_ann_backend: false
+
+# MovieLens settings
+embedding_dim: 8
+lr: 0.0003
+validation_fraction: 0.1
+test_fraction: 0.1
+min_rating_threshold: 4.0
+max_rows: null
+
+# Strict stability controls — tighter than first_benchmark_protocol.yaml
+max_grad_norm: 5.0
+q_l2_regularization_weight: 0.01
+q_value_clip: 5.0
+reward_scale: 1.0
+density_regularization_weight: 0.01
+stationarity_weight: 1.0
+bellman_weight: 1.0
+
+benchmark_claim: false

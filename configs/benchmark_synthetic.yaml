@@ -1,0 +1,24 @@
+# Synthetic-only benchmark scaffold config.
+# This is not a real benchmark config and makes no benchmark claims.
+
+experiment_name: synthetic_debug
+output_dir: runs/experiment_debug
+seed: 0
+num_steps: 10
+batch_size: 16
+num_transitions: 256
+num_actions: 128
+state_dim: 8
+action_dim: 6
+embedding_dim: 16
+k: 10
+gamma: 0.99
+target_tau: 0.05
+target_update_every: 1
+use_persistent_index: true
+index_refresh_every: 5
+index_encoder_policy: ema
+index_ema_tau: 0.05
+index_backend: exact
+index_metric: dot
+synthetic_only: true

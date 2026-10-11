@@ -1,0 +1,30 @@
+# Optional D4RL/Minari offline RL support protocol config.
+# Loads real datasets behind lazy imports (d4rl or minari).
+# When neither dependency is available, the protocol fails clearly with an ImportError.
+# Scaffold evidence only. No offline RL benchmark claims.
+
+protocol_name: d4rl_optional_support_protocol
+dataset_name: hopper-medium-v2
+output_dir: runs/d4rl_optional_protocol
+seed: 0
+num_steps: 100
+batch_size: 32
+gamma: 0.99
+k_values:
+  - 5
+  - 10
+  - 20
+train_k: 10
+lr: 0.0003
+embedding_dim: 16
+codebook_size: 64
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 10
+index_encoder_policy: online
+index_ema_tau: null
+target_tau: 0.05
+target_update_every: 1
+scaffold_only: true
+benchmark_claim: false

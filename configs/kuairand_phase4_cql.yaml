@@ -1,0 +1,52 @@
+# Phase 4 — CQL (Kumar et al. 2020): conservative Q-learning baseline.
+# KuaiRand-Pure baseline 2. benchmark_claim: false — scaffold diagnostics only.
+protocol_name: kuairand_phase4_cql
+data_dir: data/kuairand/KuaiRand-Pure/data
+output_dir: runs/phase4/cql
+seed: 0
+num_steps: 5000
+batch_size: 256
+embedding_dim: 32
+gamma: 0.99
+k_values: [20]
+train_k: 20
+lr: 0.0001
+
+max_rows: null
+max_eval_rows: 5000
+
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 1
+index_encoder_policy: online
+
+target_tau: 0.01
+target_update_every: 1
+max_grad_norm: 5.0
+q_l2_regularization_weight: 0.01
+q_value_clip: 5.0
+reward_scale: 1.0
+
+density_regularization_weight: 0.0
+stationarity_weight: 0.0
+bellman_weight: 1.0
+
+ranking_margin_weight: 0.0
+ranking_margin: 0.5
+ranking_negative_samples: 20
+retrieval_alignment_weight: 0.0
+retrieval_alignment_margin: 1.0
+retrieval_alignment_warmup_steps: 0
+retrieval_alignment_loss_type: listwise_kl
+listwise_teacher_temperature: 0.2
+listwise_retrieval_temperature: 0.07
+
+cql_weight: 1.0
+cql_num_samples: 64
+bcq_weight: 0.0
+
+device: cuda
+save_model_checkpoint: false
+benchmark_claim: false
+scaffold_only: true

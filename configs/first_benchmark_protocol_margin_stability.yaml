@@ -1,0 +1,82 @@
+# Margin-stability preset for the first benchmark protocol.
+#
+# Extends strict_stability with an auxiliary ranking-margin loss to counteract
+# Q-function degeneration (near-uniform Q scores) observed on seeds 2 and 4.
+# All results are claim-free (benchmark_claim: false).
+#
+# New vs first_benchmark_protocol_strict_stability.yaml:
+#   ranking_margin_weight: 0.1   (auxiliary ranking-margin loss active)
+#   ranking_margin:        0.5   (hinge margin: pos_Q must exceed neg_Q by 0.5)
+#   ranking_negative_samples: 20 (negatives per step)
+#
+# Usage:
+#   python -m retrieval_alignment.train --run-benchmark-protocol \
+#       --config configs/first_benchmark_protocol_margin_stability.yaml \
+#       --data-path /path/to/ml-latest-small/ratings.csv
+
+protocol_name: first_benchmark_protocol_margin_stability
+output_dir: runs/first_benchmark_protocol_margin_stability
+
+# Sweep axes
+routes:
+  - movielens_chrono
+seeds:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+num_steps: 1000
+batch_size: 8
+gamma: 0.99
+k_values:
+  - 20
+train_k: 20
+index_backend_values:
+  - exact
+index_metric: dot
+index_refresh_values:
+  - 5
+index_encoder_policies:
+  - online
+index_ema_tau_values:
+  - null
+
+# Training
+use_persistent_index: true
+target_tau: 0.05
+target_update_every: 1
+
+# Baselines
+baselines:
+  - random
+  - nearest
+
+# Flags
+enable_dwmql: true
+enable_exact_backend_control: true
+enable_ann_backend: false
+
+# MovieLens settings
+embedding_dim: 8
+lr: 0.0003
+validation_fraction: 0.1
+test_fraction: 0.1
+min_rating_threshold: 4.0
+max_rows: null
+
+# Strict stability controls (same as strict_stability preset)
+max_grad_norm: 5.0
+q_l2_regularization_weight: 0.01
+q_value_clip: 5.0
+reward_scale: 1.0
+density_regularization_weight: 0.01
+stationarity_weight: 1.0
+bellman_weight: 1.0
+
+# Auxiliary ranking-margin loss — auxiliary stabilization, not core objective
+ranking_margin_weight: 0.1
+ranking_margin: 0.5
+ranking_negative_samples: 20
+
+benchmark_claim: false

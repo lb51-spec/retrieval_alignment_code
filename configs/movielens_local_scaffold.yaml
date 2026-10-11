@@ -1,0 +1,9 @@
+adapter_name: movielens
+data_path: path/to/ratings.csv
+split_mode: chronological
+validation_fraction: 0.1
+test_fraction: 0.1
+min_rating_threshold: 4.0
+max_rows: null
+scaffold_only: true
+benchmark_claim: false

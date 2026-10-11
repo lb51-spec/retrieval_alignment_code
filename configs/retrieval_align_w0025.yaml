@@ -1,0 +1,66 @@
+# D2: retrieval_alignment_weight=0.025, embedding_dim=16, refresh=1
+# Lower-bound sweep point — expected to recover Q-margin/PMR toward C1 baseline.
+# All results are claim-free (benchmark_claim: false).
+
+protocol_name: first_benchmark_protocol_margin_stability
+output_dir: runs/retrieval_align_w0025
+
+routes:
+  - movielens_chrono
+seeds:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+num_steps: 1000
+batch_size: 8
+gamma: 0.99
+k_values:
+  - 20
+train_k: 20
+index_backend_values:
+  - exact
+index_metric: dot
+index_refresh_values:
+  - 1
+index_encoder_policies:
+  - online
+index_ema_tau_values:
+  - null
+
+use_persistent_index: true
+target_tau: 0.05
+target_update_every: 1
+
+baselines:
+  - random
+  - nearest
+
+enable_dwmql: true
+enable_exact_backend_control: true
+enable_ann_backend: false
+
+embedding_dim: 16
+lr: 0.0003
+validation_fraction: 0.1
+test_fraction: 0.1
+min_rating_threshold: 4.0
+max_rows: null
+
+max_grad_norm: 5.0
+q_l2_regularization_weight: 0.01
+q_value_clip: 5.0
+reward_scale: 1.0
+density_regularization_weight: 0.01
+stationarity_weight: 1.0
+bellman_weight: 1.0
+
+ranking_margin_weight: 0.1
+ranking_margin: 0.5
+ranking_negative_samples: 20
+
+retrieval_alignment_weight: 0.025
+retrieval_alignment_margin: 1.0
+
+benchmark_claim: false

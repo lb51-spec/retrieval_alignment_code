@@ -1,0 +1,74 @@
+# Phase 2 Gate G1: ml-25m single-seed pilot
+# Goal: confirm dot+HNSW and cosine+IVF recall behaviour holds at 62k-action scale.
+# benchmark_claim: false — this is a scale-validation diagnostic, not a benchmark result.
+#
+# Scaled vs the small-dataset configs:
+#   embedding_dim: 64  (was 16; needs more capacity for 62k items)
+#   batch_size: 256    (was 8; makes GPU compute-bound, not launch-overhead-bound)
+#   num_steps: 5000    (was 1000; more data = more steps justified)
+#   lr: 0.0001         (slightly lower for stability at larger dim)
+#   device: cuda       (GPU training)
+
+protocol_name: ml25m_g1_pilot
+data_path: data/movielens/ml-25m/ratings.csv
+output_dir: runs/ml25m_g1
+seed: 0
+num_steps: 5000
+batch_size: 256
+gamma: 0.99
+k_values: [20]
+train_k: 20
+lr: 0.0001
+embedding_dim: 64
+min_rating_threshold: 4.0
+
+# Cap rows to avoid Python state-list MemoryError in MovieLensLocalTask.__post_init__.
+# 3M rows → 31k-movie catalogue (3.3x small dataset's 9.7k), sufficient to test
+# whether ANN recall holds at large-catalogue scale (Gate G1 question).
+# The fundamental fix for larger runs requires chunked state construction (Phase 3).
+max_rows: 5000000
+
+# ANN index — use exact during training, audit under HNSW/IVF at eval
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 1
+index_encoder_policy: online
+
+# Optimisation
+target_tau: 0.01
+target_update_every: 1
+max_grad_norm: 5.0
+q_l2_regularization_weight: 0.01
+q_value_clip: 5.0
+reward_scale: 1.0
+
+# Density correction
+density_regularization_weight: 0.01
+stationarity_weight: 1.0
+bellman_weight: 1.0
+
+# Retrieval alignment (B2 firewall, listwise KL)
+ranking_margin_weight: 0.1
+ranking_margin: 0.5
+ranking_negative_samples: 20
+retrieval_alignment_weight: 0.1
+retrieval_alignment_margin: 1.0
+retrieval_alignment_warmup_steps: 500
+retrieval_alignment_loss_type: listwise_kl
+listwise_teacher_temperature: 0.2
+listwise_retrieval_temperature: 0.07
+
+# GPU training; eval runs on CPU automatically
+device: cuda
+
+# Save model for re-eval under different indexes without retraining
+save_model_checkpoint: true
+
+# Cap evaluation rows per split to bound post-training diagnostic time.
+# With 5M total rows, full eval over all splits would take hours.
+# 10k rows per split is sufficient to estimate PMR/recall at G1 scale.
+max_eval_rows: 10000
+
+benchmark_claim: false
+scaffold_only: true

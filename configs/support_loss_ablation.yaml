@@ -1,0 +1,28 @@
+synthetic_only: true
+benchmark_claim: false
+num_steps: 50
+batch_size: 8
+num_transitions: 64
+num_actions: 64
+state_dim: 4
+action_dim: 3
+embedding_dim: 8
+gamma: 0.99
+lr: 0.0003
+target_tau: 0.05
+target_update_every: 1
+seeds: [0, 1]
+k_values: [10, 40]
+refresh_values: [10, 50]
+encoder_policies: ["online", "ema"]
+ema_tau_values: [0.05]
+retrieval_correction_modes: ["aware", "naive"]
+support_correction_weight_values: [0.0, 0.1]
+support_weighting_mode: "missing_mass"
+support_weighting_modes: ["none", "missing_mass"]
+support_weight_scale_values: [1.0]
+support_weight_min: 0.1
+support_weight_max: 10.0
+support_pmr_eps: 0.000001
+index_backend: exact
+index_metric: dot

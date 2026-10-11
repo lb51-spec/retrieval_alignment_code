@@ -1,0 +1,33 @@
+# MovieLens chronological strict support protocol config.
+# Uses global timestamp ordering (chronological_strict) for a leakage-free split.
+# Scaffold evidence only. No recommender benchmark claims.
+
+protocol_name: movielens_chrono_support_protocol
+data_path: data/movielens/ml-latest-small/ratings.csv
+output_dir: runs/movielens_chrono_protocol
+seed: 0
+num_steps: 100
+batch_size: 32
+gamma: 0.99
+k_values:
+  - 5
+  - 10
+  - 20
+train_k: 10
+lr: 0.0003
+embedding_dim: 16
+validation_fraction: 0.1
+test_fraction: 0.1
+min_rating_threshold: 4.0
+max_rows: null
+temperature: 1.0
+index_backend: exact
+index_metric: dot
+use_persistent_index: true
+index_refresh_every: 10
+index_encoder_policy: online
+index_ema_tau: null
+target_tau: 0.05
+target_update_every: 1
+scaffold_only: true
+benchmark_claim: false
